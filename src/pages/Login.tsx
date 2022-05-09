@@ -46,7 +46,7 @@ const Login = () => {
     if (error) setOpen(true)
   }, [error])
 
-  if (isAuth) return  <Navigate to={"/"}/>
+  if (isAuth) return  <Navigate to={"/beejee"}/>
 
   return (
     <Container component="main" maxWidth="xs">
