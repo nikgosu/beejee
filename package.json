@@ -1,6 +1,7 @@
 {
   "name": "beejee",
   "version": "0.1.0",
+  "homepage": "https://nikgosu.github.io/beejee/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
