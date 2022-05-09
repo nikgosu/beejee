@@ -24,7 +24,7 @@ const NavBar = () => {
           <Typography className='logo' variant="h5" component="div" sx={{ flexGrow: 1 }}>
             Awesome TODO app
           </Typography>
-          <Link className='link' style={{ flexGrow: 1 }} to="/">
+          <Link className='link' style={{ flexGrow: 1 }} to="/beejee">
             <Typography variant="h6" component="div" >
               Home
             </Typography>
