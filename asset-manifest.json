@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/beejee/static/css/main.7c398a40.css",
-    "main.js": "/beejee/static/js/main.cdcd76fb.js",
+    "main.js": "/beejee/static/js/main.373e312c.js",
     "static/js/787.d6c74341.chunk.js": "/beejee/static/js/787.d6c74341.chunk.js",
     "index.html": "/beejee/index.html",
     "main.7c398a40.css.map": "/beejee/static/css/main.7c398a40.css.map",
-    "main.cdcd76fb.js.map": "/beejee/static/js/main.cdcd76fb.js.map",
+    "main.373e312c.js.map": "/beejee/static/js/main.373e312c.js.map",
     "787.d6c74341.chunk.js.map": "/beejee/static/js/787.d6c74341.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7c398a40.css",
-    "static/js/main.cdcd76fb.js"
+    "static/js/main.373e312c.js"
   ]
 }
