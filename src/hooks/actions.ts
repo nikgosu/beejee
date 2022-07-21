@@ -1,4 +1,4 @@
-import {todoActions} from "../store/redusers/todo.slice";
+import {todoActions} from "../store/todo.slice/todo.slice";
 import {bindActionCreators} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 

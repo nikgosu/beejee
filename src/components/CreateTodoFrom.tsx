@@ -6,7 +6,7 @@ import {Todo} from "../models";
 import {
   useFetchCreateTodoMutation,
   useFetchUpdateTodoMutation,
-} from "../store/redusers/todo.api";
+} from "../store/todo.api/todo.api";
 import {useActions} from "../hooks/actions";
 
 const validateEmail = (email: string) => {

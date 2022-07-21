@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {AppBar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {useAppSelector} from "../hooks/redux";
-import {useLogoutMutation} from "../store/redusers/todo.api";
+import {useLogoutMutation} from "../store/todo.api/todo.api";
 import {useActions} from "../hooks/actions";
 
 const NavBar = () => {

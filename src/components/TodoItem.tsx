@@ -6,7 +6,7 @@ import {
   useFetchDeleteTodoMutation,
   useFetchUpdateTodoMutation,
   useLazyFetchTodosQuery
-} from "../store/redusers/todo.api";
+} from "../store/todo.api/todo.api";
 import {Todo} from "../models";
 
 interface Props {

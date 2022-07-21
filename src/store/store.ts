@@ -1,6 +1,6 @@
 import {configureStore} from "@reduxjs/toolkit";
-import {todoReducer} from "./redusers/todo.slice";
-import {todoApi} from "./redusers/todo.api";
+import {todoReducer} from "./todo.slice/todo.slice";
+import {todoApi} from "./todo.api/todo.api";
 import {setupListeners} from "@reduxjs/toolkit/query";
 
 export const store = configureStore({
