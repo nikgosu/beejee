@@ -8,7 +8,7 @@ import {useActions} from "../hooks/actions";
 const NavBar = () => {
 
   const {isAuth} = useAppSelector(state => state.todo)
-  const [fetchLogOut, {isLoading, isError, data: logoutData}] = useLogoutMutation()
+  const [fetchLogOut, {data: logoutData}] = useLogoutMutation()
   const {logout} = useActions()
 
   const handleLogOut = () => {

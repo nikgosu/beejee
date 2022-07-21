@@ -22,7 +22,7 @@ const Login = () => {
   const [isEmpty, setIsEmpty] = useState(false)
   const [open, setOpen] = React.useState(false);
 
-  const [fetchLogin, {isLoading, isError, data: loginData}] = useLoginMutation()
+  const [fetchLogin, {isError, data: loginData}] = useLoginMutation()
   const {login} = useActions()
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {

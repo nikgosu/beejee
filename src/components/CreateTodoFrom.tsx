@@ -4,9 +4,8 @@ import {useAppSelector} from "../hooks/redux";
 import {Navigate} from "react-router-dom";
 import {Todo} from "../models";
 import {
-  useFetchCreateTodoMutation, useFetchTodosQuery,
+  useFetchCreateTodoMutation,
   useFetchUpdateTodoMutation,
-  useLazyFetchTodosQuery
 } from "../store/redusers/todo.api";
 import {useActions} from "../hooks/actions";
 

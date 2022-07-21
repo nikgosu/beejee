@@ -6,7 +6,7 @@ import TodoItem from "../components/TodoItem";
 import SortSelect from "../components/SortSelect";
 import {useAppSelector} from "../hooks/redux";
 import PageNavigation from "../components/PageNavigation";
-import {useFetchIsAuthMutation, useFetchTodosQuery, useLazyFetchTodosQuery} from "../store/redusers/todo.api";
+import {useFetchIsAuthMutation, useFetchTodosQuery} from "../store/redusers/todo.api";
 import {Todo} from "../models";
 import {useActions} from "../hooks/actions";
 
@@ -19,7 +19,7 @@ const getId = () => {
 const Home:FC = () => {
   const {todosPage} = useAppSelector(state => state.todo)
   const {login, setTodos} = useActions()
-  const {isLoading, isError, data: todos} = useFetchTodosQuery()
+  const {data: todos} = useFetchTodosQuery()
   const [getIsAuth, {data: isAuth}] = useFetchIsAuthMutation()
 
   useEffect(() => {
