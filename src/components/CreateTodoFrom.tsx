@@ -1,10 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
 import {Alert, Button, Container, Grid, Snackbar, TextField} from "@mui/material";
-import {Todo} from "../types/types";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {fetchCreateTodo, fetchTodos, fetchUpdateTodo} from "../store/redusers/ActionCreators";
-import {TodoSlice} from "../store/redusers/TodoSlice";
+import {useAppSelector} from "../hooks/redux";
 import {Navigate} from "react-router-dom";
+import {Todo} from "../models";
+import {
+  useFetchCreateTodoMutation, useFetchTodosQuery,
+  useFetchUpdateTodoMutation,
+  useLazyFetchTodosQuery
+} from "../store/redusers/todo.api";
+import {useActions} from "../hooks/actions";
 
 const validateEmail = (email: string) => {
   const re = /[a-z\d!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z\d!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z\d](?:[a-z\d-]*[a-z\d])?\.)+[a-z\d](?:[a-z\d-]*[a-z\d])?/;
@@ -13,8 +17,7 @@ const validateEmail = (email: string) => {
 
 const CreateTodoFrom:FC = () => {
 
-  const dispatch = useAppDispatch()
-  const {update, updatedTodo, isAuth} = useAppSelector(state => state.TodoReducer)
+  const {update, updatedTodo, isAuth, todos, currentIndex} = useAppSelector(state => state.todo)
 
   const [todo, setTodo] = useState<Todo>()
   const [userName, setUserName] = useState('')
@@ -26,6 +29,11 @@ const CreateTodoFrom:FC = () => {
   const [isValidEmail, setIsValidEmail] = useState(true)
   const [open, setOpen] = React.useState(false);
   const [logout, setLogout] = useState(false)
+
+  const [fetchCreateTodo] = useFetchCreateTodoMutation()
+  const [fetchUpdateTodo] = useFetchUpdateTodoMutation()
+
+  const {setUpdateForm, setNextPage} = useActions()
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -69,7 +77,7 @@ const CreateTodoFrom:FC = () => {
       setText('')
       setIsEmpty(false)
       setIsValidEmail(true)
-      dispatch(TodoSlice.actions.setUpdateForm(false))
+      setUpdateForm(false)
     } else if (!isAuth) {
       setUserName('')
       setEmail('')
@@ -102,16 +110,15 @@ const CreateTodoFrom:FC = () => {
 
   useEffect(() => {
     if (todo && !update && !isUpdated && isCreate) {
-      dispatch(fetchCreateTodo(todo))
-      dispatch(fetchTodos())
+      fetchCreateTodo(todo)
+      if (todos.length > currentIndex) setNextPage()
     }
   }, [todo, isUpdated, isCreate])
 
   useEffect(() => {
     if (todo && isUpdated) {
       setIsUpdated(false)
-      dispatch(fetchUpdateTodo(todo))
-      dispatch(fetchTodos())
+      fetchUpdateTodo(todo)
     }
   }, [todo, isUpdated])
 
@@ -128,7 +135,7 @@ const CreateTodoFrom:FC = () => {
         justifyContent: 'center'
       }}>
         <TextField
-          onKeyPress={handleCreateByEnter}
+          onKeyDown={handleCreateByEnter}
           value={userName}
           error={isEmpty}
           id={isEmpty ? 'outlined-error' : ''}
@@ -143,7 +150,7 @@ const CreateTodoFrom:FC = () => {
         justifyContent: 'center'
       }}>
         <TextField
-          onKeyPress={handleCreateByEnter}
+          onKeyDown={handleCreateByEnter}
           value={email}
           label={isValidEmail ? 'Email' : 'Email is not valid'}
           error={isEmpty}
@@ -158,7 +165,7 @@ const CreateTodoFrom:FC = () => {
         justifyContent: 'center'
       }}>
         <TextField
-          onKeyPress={handleCreateByEnter}
+          onKeyDown={handleCreateByEnter}
           value={text}
           error={isEmpty}
           onChange={(e) => setText(e.target.value)}

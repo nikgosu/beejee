@@ -1,16 +1,16 @@
 import React, {FC} from 'react';
 import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {TodoSlice} from "../store/redusers/TodoSlice";
+import {useAppSelector} from "../hooks/redux";
+import {useActions} from "../hooks/actions";
 
 
 const SortSelect:FC = () => {
 
-  const dispatch = useAppDispatch()
-  const {sort} = useAppSelector(state => state.TodoReducer)
+  const {sort} = useAppSelector(state => state.todo)
+  const {setSort} = useActions()
 
   const handleChangeSort = (e: SelectChangeEvent<number>) => {
-    dispatch(TodoSlice.actions.setSort(+e.target.value))
+    setSort(+e.target.value)
   }
 
   return (

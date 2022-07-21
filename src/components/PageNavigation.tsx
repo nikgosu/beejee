@@ -1,20 +1,23 @@
 import React, {FC} from 'react';
 import {Button, Grid} from "@mui/material";
-import {TodoSlice} from "../store/redusers/TodoSlice";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
+import {useAppSelector} from "../hooks/redux";
+import {useActions} from "../hooks/actions";
 
 const PageNavigation:FC = () => {
 
-  const dispatch = useAppDispatch()
-  const {prevButton, nextButton} = useAppSelector(state => state.TodoReducer)
+  const {prevButton, nextButton, currentIndex, todos} = useAppSelector(state => state.todo)
+  const {setNextPage, setPreviousPage} = useActions()
 
   const handleNextPage = () => {
-    dispatch(TodoSlice.actions.setNextPage())
+    setNextPage()
   }
 
   const handlePreviousPage = () => {
-    dispatch(TodoSlice.actions.setPreviousPage())
+    setPreviousPage()
   }
+
+  console.log(currentIndex)
+  console.log(todos.length, 'lenth')
 
   return (
     <Grid
