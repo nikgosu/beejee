@@ -1,24 +1,8 @@
-import {Todo} from "../../types/types";
+import {Todo, TodosState} from "../../models";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
-interface TodosState {
-  isAuth: boolean
-  authError: string
-  todos: Todo[]
-  todosPage: Todo[]
-  update: boolean
-  updatedTodo: Todo
-  sort: number
-  limit: number
-  currentIndex: number
-  isLoading: boolean
-  error: string
-  nextButton: boolean
-  prevButton: boolean
-}
-
-const initialState: TodosState = {
+export const initialState: TodosState = {
   isAuth: false,
   authError: '',
   todos: [],
@@ -28,8 +12,6 @@ const initialState: TodosState = {
   sort: 0,
   limit: 3,
   currentIndex: 0,
-  isLoading: false,
-  error: '',
   nextButton: false,
   prevButton: true
 }
@@ -38,28 +20,20 @@ export const TodoSlice = createSlice({
   name: 'card',
   initialState,
   reducers: {
-    todosFetching(state) {
-      state.isLoading = true
-    },
-    todosFetchingSuccess(state, action: PayloadAction<Todo[]>) {
-      state.isLoading = false
-      state.error = ''
+    setTodos(state, action: PayloadAction<Todo[]>) {
       state.todos = action.payload
       if (state.currentIndex === 0) {
         state.todosPage = state.todos.slice(state.currentIndex, state.currentIndex + state.limit)
         state.currentIndex = state.currentIndex + state.limit
       }
       state.todosPage = state.todos.slice(0, state.currentIndex)
+      if (state.todos.length < 3) state.nextButton = true
     },
-    todosFetchingError(state, action: PayloadAction<string>) {
-      state.isLoading = false
-      state.error = action.payload
+    login(state, action: PayloadAction<boolean>) {
+      state.isAuth = action.payload;
     },
-    login(state, action: PayloadAction<string>) {
-      state.isAuth = !!action.payload;
-    },
-    logout(state, action: PayloadAction<string>) {
-      if (!action.payload) state.isAuth = false
+    logout(state, action: PayloadAction<boolean>) {
+      state.isAuth = action.payload
     },
     setDone(state) {
       state.todosPage = state.todos.slice(state.currentIndex - state.limit, state.currentIndex)
@@ -103,13 +77,13 @@ export const TodoSlice = createSlice({
       }
     },
     setNextPage(state) {
-        if (state.currentIndex > (state.todos.length - 1)) {
-          state.nextButton = true
-          return
-        }
-        state.todosPage = state.todos.slice(state.currentIndex, state.currentIndex + state.limit)
-        state.currentIndex = state.currentIndex + state.limit
-        state.prevButton = false
+      if (state.currentIndex > (state.todos.length - 1)) {
+        state.nextButton = true
+        return
+      }
+      state.todosPage = state.todos.slice(state.currentIndex, state.currentIndex + state.limit)
+      state.currentIndex = state.currentIndex + state.limit
+      state.prevButton = false
     },
     setPreviousPage(state) {
       state.nextButton = false
@@ -123,4 +97,5 @@ export const TodoSlice = createSlice({
   }
 })
 
-export default TodoSlice.reducer
+export const todoActions = TodoSlice.actions
+export const todoReducer = TodoSlice.reducer

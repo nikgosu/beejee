@@ -7,20 +7,23 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {fetchLogin} from "../store/redusers/ActionCreators";
+import {useAppSelector} from "../hooks/redux";
 import {Navigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Alert, Snackbar} from "@mui/material";
+import {useLoginMutation} from "../store/todo.api/todo.api";
+import {useActions} from "../hooks/actions";
 
 const Login = () => {
 
-  const dispatch = useAppDispatch()
-  const {isAuth, error} = useAppSelector(state => state.TodoReducer)
+  const {isAuth} = useAppSelector(state => state.todo)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [isEmpty, setIsEmpty] = useState(false)
   const [open, setOpen] = React.useState(false);
+
+  const [fetchLogin, {isError, data: loginData}] = useLoginMutation()
+  const {login} = useActions()
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -39,12 +42,16 @@ const Login = () => {
       userName,
       password
     }
-    dispatch(fetchLogin(data))
+    fetchLogin(data)
   }
 
   useEffect(() => {
-    if (error) setOpen(true)
-  }, [error])
+    if (isError) setOpen(true)
+  }, [isError])
+
+  useEffect(() => {
+    loginData && login(loginData)
+  }, [loginData])
 
   if (isAuth) return  <Navigate to={"/beejee"}/>
 

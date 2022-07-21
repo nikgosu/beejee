@@ -1,9 +1,13 @@
 import React, {FC, useId} from 'react';
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
-import {Todo} from "../types/types";
-import {fetchDeleteTodo, fetchTodos, fetchUpdateTodo} from "../store/redusers/ActionCreators";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {TodoSlice} from "../store/redusers/TodoSlice";
+import {useAppSelector} from "../hooks/redux";
+import {useActions} from "../hooks/actions";
+import {
+  useFetchDeleteTodoMutation,
+  useFetchUpdateTodoMutation,
+  useLazyFetchTodosQuery
+} from "../store/todo.api/todo.api";
+import {Todo} from "../models";
 
 interface Props {
   todo: Todo
@@ -11,24 +15,32 @@ interface Props {
 
 const TodoItem:FC<Props> = ({todo}: Props) => {
 
-  const dispatch = useAppDispatch()
-  const {isAuth} = useAppSelector(state => state.TodoReducer)
+  const {isAuth} = useAppSelector(state => state.todo)
+  const {setUpdateForm, setUpdateTodo, deleteTodo, setDone} = useActions()
+
+  const [fetchTodos] = useLazyFetchTodosQuery()
+  const [fetchDeleteTodo] = useFetchDeleteTodoMutation()
+  const [fetchUpdateTodo] = useFetchUpdateTodoMutation()
 
   const handleUpdateTodo = () => {
     if (isAuth) {
-      dispatch(TodoSlice.actions.setUpdateForm(true))
-      dispatch(TodoSlice.actions.setUpdateTodo(todo))
+      setUpdateForm(true)
+      setUpdateTodo(todo)
     }
   }
 
   const handleDelete = () => {
-    dispatch(fetchTodos())
-    if (todo._id) dispatch(fetchDeleteTodo(todo._id))
+    fetchTodos()
+    if (todo._id) {
+      fetchDeleteTodo(todo._id)
+      deleteTodo(todo._id)
+    }
   }
 
   const handleSetDone = () => {
-    dispatch(fetchTodos())
-    dispatch(fetchUpdateTodo({...todo, isDone: !todo.isDone}))
+    fetchUpdateTodo({...todo, isDone: !todo.isDone})
+    setDone()
+    fetchTodos()
   }
 
   return (

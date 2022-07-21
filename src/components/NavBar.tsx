@@ -1,21 +1,23 @@
 import React, {useEffect} from 'react';
 import {AppBar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {fetchLogOut} from "../store/redusers/ActionCreators";
+import {useAppSelector} from "../hooks/redux";
+import {useLogoutMutation} from "../store/todo.api/todo.api";
+import {useActions} from "../hooks/actions";
 
 const NavBar = () => {
 
-  const {isAuth} = useAppSelector(state => state.TodoReducer)
-  const dispatch = useAppDispatch()
+  const {isAuth} = useAppSelector(state => state.todo)
+  const [fetchLogOut, {data: logoutData}] = useLogoutMutation()
+  const {logout} = useActions()
 
   const handleLogOut = () => {
-    dispatch(fetchLogOut('admin'))
+    fetchLogOut('admin')
   }
 
   useEffect(() => {
-
-  }, [])
+    if (!logoutData && logoutData !== undefined) logout(logoutData)
+  }, [logoutData])
 
   return (
     <Box sx={{ flexGrow: 1 }}>

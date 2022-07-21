@@ -1,13 +1,14 @@
 import React, {FC, useEffect} from 'react';
 import {Container} from "@mui/material";
 import CreateTodoFrom from "../components/CreateTodoFrom";
-import {Todo} from "../types/types";
 import {nanoid} from "nanoid";
 import TodoItem from "../components/TodoItem";
 import SortSelect from "../components/SortSelect";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {fetchIsAuth, fetchTodos} from "../store/redusers/ActionCreators";
+import {useAppSelector} from "../hooks/redux";
 import PageNavigation from "../components/PageNavigation";
+import {useFetchIsAuthMutation, useFetchTodosQuery} from "../store/todo.api/todo.api";
+import {Todo} from "../models";
+import {useActions} from "../hooks/actions";
 
 const getId = () => {
   return nanoid()
@@ -16,17 +17,29 @@ const getId = () => {
 
 
 const Home:FC = () => {
-  const dispatch = useAppDispatch()
-  const {todosPage} = useAppSelector(state => state.TodoReducer)
+  const {todosPage} = useAppSelector(state => state.todo)
+  const {login, setTodos} = useActions()
+  const {data: todos} = useFetchTodosQuery()
+  const [getIsAuth, {data: isAuth}] = useFetchIsAuthMutation()
 
   useEffect(() => {
-    dispatch(fetchIsAuth('admin'))
-    const intervalId = setInterval(() => {
-      dispatch(fetchIsAuth('admin'))
-    }, 5000)
-    dispatch(fetchTodos())
-    return () => clearInterval(intervalId)
+    getIsAuth('admin')
+    isAuth && login(true)
+
+    // const intervalId = setInterval(() => {
+    //   getIsAuth('admin')
+    // }, 5000)
+    //
+    // return () => clearInterval(intervalId)
   }, [])
+
+  useEffect(() => {
+    isAuth && login(true)
+  }, [isAuth])
+
+  useEffect(() => {
+    todos && setTodos(todos)
+  }, [todos])
 
   return (
     <>
